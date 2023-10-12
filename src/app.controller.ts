@@ -1,21 +1,16 @@
 /* eslint-disable prettier/prettier */
 import { Body,Controller, Get } from '@nestjs/common';
-import { PrismaService } from './database/prisma.service';
-import  {randomUUID} from "node:crypto"
+
+
+import { rocket_member_repository } from './rrepositories/rocket-members-repository';
 import { CreateTeamMemberBodyDto } from './dtos/create-teeam-member-body';
 @Controller()
 export class AppController {
-  constructor (private prisma: PrismaService) {}
+  constructor (private prisma: rocket_member_repository) {}
   @Get("hello")
   async getHello(@Body() body: CreateTeamMemberBodyDto) {
     const {name, "function": memberFunction} = body
-    const member = await this.prisma.rocketTeamMenber.create ({
-      data: {
-        id: randomUUID (),
-        name: `Capital zap`,
-        function: `coisas leves`,
-      },
-    });
+    const member = await this.prisma.addMember (name,memberFunction)
     return  {
       hello: member
     }
